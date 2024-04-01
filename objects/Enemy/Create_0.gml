@@ -8,6 +8,7 @@ dir = [0, 0];
 chasing = "none";
 
 colliders = [Player, Enemy, Core, Wall];
+enemies = [Enemy];
 
 function setDir(){
     pDirX = Player.x - x;
@@ -43,28 +44,31 @@ function teleport() {
         minHeight = Player.y - Camera.viewHeight/2;
         maxHeight = Player.y + Camera.viewHeight/2;
 
-        border = 32;
-        teleportGapX = (border + eWidth);
-        teleportGapY = (border + eHeight);
+        border = 64;
+        halfBorder = border / 2;
 
         if (x < minWidth - border) {
-            if(!place_meeting(maxWidth, y, colliders) && !BuildManager.isInsideGrid(maxWidth, y)){
-                x = maxWidth - border / 2;
+            inst = instance_place(maxWidth - halfBorder, y, colliders);
+            if(inst != noone && !BuildManager.isInsideGrid(maxWidth, y)){
+                x = maxWidth - halfBorder;
             }
         }
         if (x > maxWidth + border) {
-            if(!place_meeting(minWidth, y, colliders) && !BuildManager.isInsideGrid(minWidth, y)){
-                x = minWidth + border / 2;
+            inst = instance_place(minWidth + halfBorder, y, colliders);
+            if(inst != noone && !BuildManager.isInsideGrid(minWidth, y)){
+                x = minWidth + halfBorder;
             }
         }
         if (y < minHeight - border) {
-            if(!place_meeting(x, maxHeight, colliders) && !BuildManager.isInsideGrid(x, maxHeight)){
-                y = maxHeight - border / 2;
+            inst = instance_place(x, maxHeight - halfBorder, colliders);
+            if(inst != noone && !BuildManager.isInsideGrid(x, maxHeight)){
+                y = maxHeight - halfBorder;
             }
         }
         if (y > maxHeight + border) {
-            if(!place_meeting(x, minHeight, colliders) && !BuildManager.isInsideGrid(x, minHeight)){
-                y = minHeight + border / 2;
+            inst = instance_place(x, minHeight + halfBorder, colliders);
+            if(inst != noone && !BuildManager.isInsideGrid(x, minHeight)){
+                y = minHeight + halfBorder;
             }
         }
     }
@@ -84,6 +88,7 @@ function move(){
     x = moveX(x, y, xySpeed[0], dir[0], colliders);
     y = moveY(x, y, xySpeed[1], dir[1], colliders);
     checkDie();
+    checkInst(x, y, enemies, self);
 }
 
 

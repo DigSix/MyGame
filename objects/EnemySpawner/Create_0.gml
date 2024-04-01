@@ -1,4 +1,4 @@
-spawnTimer = global.frameRate * 2;
+spawnTimer = global.frameRate * 0.75;
 
 enemies = [Enemy];
 colliders = [Player, Core, Wall, Enemy];
@@ -15,15 +15,11 @@ function chooseEnemy(){
 function canSpawn(x, y, Object){
     halfWidth = Object.eWidth / 2;
     halfHeight = Object.eHeight / 2;
-    spawn = true;
-
-    if(place_meeting(x, y, colliders)){
-        spawn = false;
+    
+    if(BuildManager.isInsideGrid(x - halfWidth, y) || BuildManager.isInsideGrid(x + halfWidth, y) || BuildManager.isInsideGrid(x, y - halfHeight) || BuildManager.isInsideGrid(x, y + halfHeight)){
+        return false;
     }
-    if(BuildManager.isInsideGrid(x - halfWidth, y) && BuildManager.isInsideGrid(x + halfWidth, y) && BuildManager.isInsideGrid(x, y - halfHeight) && BuildManager.isInsideGrid(x, y + halfHeight)){
-        spawn = false;
-    }
-    return spawn;
+    return true;
 }
 
 function spawnEnemy(){

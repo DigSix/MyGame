@@ -68,3 +68,12 @@ function getDamage(Object, damage){
 function getHeal(life, heal){
     life += heal;
 }
+
+function checkInst(funcX, funcY, funcArray, funcInst){
+    inst = instance_place(funcX, funcY, funcArray);
+    if(inst != noone){
+        instance_destroy(funcInst);
+        return true;
+    }
+    return false;
+}
